@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fast-memo-v2';
+const CACHE_NAME = 'fast-memo-v3';
 const ASSETS = [
   'index.html',
   'style.css',

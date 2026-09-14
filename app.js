@@ -146,10 +146,10 @@ let restartTimer = null;
 if (SpeechRecognitionImpl) {
   recognition = new SpeechRecognitionImpl();
   recognition.lang = 'ja-JP';
-  // Androidでは continuous:true だと認識が不安定になり、同じ文が
-  // 重複して確定したり応答が遅くなるため、短いセッションを
-  // 発話ごとに自動リスタートする方式にしている。
-  recognition.continuous = false;
+  // continuous:false だと発話ごとにOSの開始音が鳴ってしまうため、
+  // continuous:true で長時間の認識を維持しつつ、
+  // 予期せず停止した場合のみ自動リスタートする。
+  recognition.continuous = true;
   recognition.interimResults = true;
 
   recognition.onresult = (event) => {
