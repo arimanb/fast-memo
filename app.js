@@ -141,11 +141,15 @@ newNoteBtn.addEventListener('click', () => {
 
 const SpeechRecognitionImpl = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
+let restartTimer = null;
 
 if (SpeechRecognitionImpl) {
   recognition = new SpeechRecognitionImpl();
   recognition.lang = 'ja-JP';
-  recognition.continuous = true;
+  // Androidでは continuous:true だと認識が不安定になり、同じ文が
+  // 重複して確定したり応答が遅くなるため、短いセッションを
+  // 発話ごとに自動リスタートする方式にしている。
+  recognition.continuous = false;
   recognition.interimResults = true;
 
   recognition.onresult = (event) => {
@@ -170,17 +174,21 @@ if (SpeechRecognitionImpl) {
   };
 
   recognition.onerror = (event) => {
-    if (event.error === 'no-speech') return;
+    if (event.error === 'no-speech' || event.error === 'aborted') return;
     setStatus(`エラー: ${event.error}`);
   };
 
   recognition.onend = () => {
     if (shouldKeepListening) {
-      try {
-        recognition.start();
-      } catch {
-        // すでに開始中の場合は無視
-      }
+      clearTimeout(restartTimer);
+      restartTimer = setTimeout(() => {
+        if (!shouldKeepListening) return;
+        try {
+          recognition.start();
+        } catch {
+          // すでに開始中の場合は無視
+        }
+      }, 200);
     } else {
       isRecording = false;
       micBtn.classList.remove('recording');
@@ -202,6 +210,7 @@ if (SpeechRecognitionImpl) {
       }
     } else {
       shouldKeepListening = false;
+      clearTimeout(restartTimer);
       recognition.stop();
       setStatus('待機中');
     }
