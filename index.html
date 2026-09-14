@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
+<title>高速メモ</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <h1>高速メモ</h1>
+    <button id="listToggleBtn" class="icon-btn" aria-label="一覧を開く">☰</button>
+  </header>
+
+  <main class="editor" id="editorView">
+    <textarea id="noteText" placeholder="マイクボタンを押して話すと、ここに文字が入力されます"></textarea>
+
+    <div class="status" id="status">待機中</div>
+
+    <div class="controls">
+      <button id="micBtn" class="mic-btn" aria-label="録音開始">🎤</button>
+      <button id="clearBtn" class="secondary-btn">クリア</button>
+      <button id="saveBtn" class="primary-btn">保存</button>
+    </div>
+  </main>
+
+  <aside class="list-view" id="listView" hidden>
+    <div class="list-header">
+      <h2>メモ一覧</h2>
+      <button id="newNoteBtn" class="icon-btn" aria-label="新規メモ">＋</button>
+    </div>
+    <ul id="noteList" class="note-list"></ul>
+  </aside>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
